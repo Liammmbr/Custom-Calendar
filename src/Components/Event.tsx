@@ -1,4 +1,4 @@
-function Event() {
+const Event = () => {
   return (
     <div>
       <form>
@@ -8,6 +8,6 @@ function Event() {
       </form>
     </div>
   );
-}
+};
 
 export default Event;
