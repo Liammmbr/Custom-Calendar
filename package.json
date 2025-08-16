@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bootstrap": "^5.3.7",
     "git": "^0.1.5",
     "react": "^18.2.0",
+    "react-date-picker": "^12.0.1",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
