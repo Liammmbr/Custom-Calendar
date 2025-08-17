@@ -38,14 +38,26 @@ const Day = ({ events, date, onUpdateEvent }: DayProps) => {
                 <input
                   type="date"
                   defaultValue={event.date.toISOString().slice(0, 10)}
-                  onChange={(e) =>
-                    onUpdateEvent({
-                      ...event,
-                      date: new Date(
-                        e.target.value + "T" + event.date.toTimeString()
-                      ),
-                    })
-                  }
+                  onChange={(e) => {
+                    //Maps the numbers to respective values
+                    const [year, month, day] = e.target.value
+                      .split("-")
+                      .map(Number);
+
+                    // Keep the old hours/minutes
+                    const hours = event.date.getHours();
+                    const minutes = event.date.getMinutes();
+
+                    // Construct new date
+                    const newDate = new Date(
+                      year,
+                      month - 1,
+                      day,
+                      hours,
+                      minutes
+                    );
+                    onUpdateEvent({ ...event, date: newDate });
+                  }}
                 />
 
                 {/* Time */}
@@ -58,6 +70,7 @@ const Day = ({ events, date, onUpdateEvent }: DayProps) => {
                     timeZone: "America/New_York", // EST/EDT
                   })}
                   onChange={(e) => {
+                    //Update date with new time
                     const [hours, minutes] = e.target.value.split(":");
                     const newDate = new Date(event.date);
                     newDate.setHours(parseInt(hours));

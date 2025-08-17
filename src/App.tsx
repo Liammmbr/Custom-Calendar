@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import Day from "./Components/Day";
 
 interface CalendarEvent {
@@ -8,12 +9,25 @@ interface CalendarEvent {
 }
 
 const App = () => {
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>(() => {
+    //Get events from local storage or return empty array if it doesnt exist
+    const stored = localStorage.getItem("Events");
+    if (!stored) return [];
+    return JSON.parse(stored).map((ev: any) => ({
+      ...ev,
+      date: new Date(ev.date), // Convert dates back into Date() Objects
+    }));
+  });
 
-  // Update event in state
+  //Saves events to lcoal storage
+  useEffect(() => {
+    localStorage.setItem("Events", JSON.stringify(events));
+  }, [events]);
+
+  // Update event in state using the events array in local storage
   const handleUpdateEvent = (updatedEvent: CalendarEvent) => {
-    setEvents(
-      events.map((ev) => (ev.id === updatedEvent.id ? updatedEvent : ev))
+    setEvents((prev) =>
+      prev.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
     );
   };
 
